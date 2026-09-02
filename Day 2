@@ -1,0 +1,225 @@
+#Leet Code
+Problem 55
+class Solution {
+
+    // Function to check if we can reach the last index
+    public boolean canJump(int[] nums) {
+
+        // Maximum index that can be reached
+        int maxReach = 0;
+
+        // Traverse the array
+        for (int i = 0; i < nums.length; i++) {
+
+            // If current index cannot be reached
+            if (i > maxReach) {
+                return false;
+            }
+
+            // Update the farthest reachable index
+            maxReach = Math.max(maxReach, i + nums[i]);
+        }
+
+        // Successfully reached the end
+        return true;
+    }
+
+    // Main method for testing
+    public static void main(String[] args) {
+
+        Solution obj = new Solution();
+
+        int[] nums1 = {2, 3, 1, 1, 4};
+        int[] nums2 = {3, 2, 1, 0, 4};
+        int[] nums3 = {0};
+        int[] nums4 = {2, 0, 0};
+        int[] nums5 = {1, 1, 0, 1};
+
+        System.out.println(obj.canJump(nums1)); 
+        System.out.println(obj.canJump(nums2)); 
+        System.out.println(obj.canJump(nums3)); 
+        System.out.println(obj.canJump(nums4)); 
+        System.out.println(obj.canJump(nums5)); 
+    }
+}
+
+Problem-238
+
+class Solution {
+    public int[] productExceptSelf(int[] nums) {
+        int n = nums.length;
+        int[] prefixProduct = new int[n];
+        int[] suffixProduct = new int[n];
+        prefixProduct[0] = 1;
+        suffixProduct[n - 1] = 1;
+
+        for(int i = 1; i < n; i++) {
+            prefixProduct[i] = prefixProduct[i - 1] * nums[i - 1];
+        } 
+        for(int i = n - 2; i >= 0; i--) {
+            suffixProduct[i] = suffixProduct[i + 1] * nums[i + 1];
+        }
+        int ans[] = new int[n];
+        for(int i = 0; i < n; i++) {
+            ans[i] = prefixProduct[i] * suffixProduct[i];
+        }
+        return ans;
+    }
+}
+
+// TC -- O(N)
+// SC -- O(N)
+
+Problem-189
+class Solution {
+
+    public static void reverse(int[] nums,int start,int end){
+        while(start < end){
+            int temp = nums[start];
+            nums[start] =nums[end];
+            nums[end]= temp;
+            start ++;
+            end--;
+        }
+    }
+
+
+    public void rotate(int[] nums, int k) {
+        int n=nums.length;
+        k=k%n;
+        reverse(nums,0,n-1);
+        reverse(nums,0,k-1);
+        reverse(nums,k,n-1);
+    }
+}
+
+Problem-56
+import java.util.*;
+
+class Solution {
+    public int[][] merge(int[][] intervals) {
+
+        // Sort according to starting value
+        Arrays.sort(intervals, (a, b) -> a[0] - b[0]);
+
+        List<int[]> result = new ArrayList<>();
+
+        int start = intervals[0][0];
+        int end = intervals[0][1];
+
+        for (int i = 1; i < intervals.length; i++) {
+
+            // Overlapping
+            if (intervals[i][0] <= end) {
+
+                end = Math.max(end, intervals[i][1]);
+
+            } 
+            // Non-overlapping
+            else {
+
+                result.add(new int[]{start, end});
+
+                start = intervals[i][0];
+                end = intervals[i][1];
+            }
+        }
+
+        // Add last interval
+        result.add(new int[]{start, end});
+
+        return result.toArray(new int[result.size()][]);
+    }
+}
+
+Problem-134
+class Solution {
+    public int canCompleteCircuit(int[] gas, int[] cost) {
+
+        int totalGas = 0;
+        int totalCost = 0;
+
+        int tank = 0;
+        int start = 0;
+
+        for (int i = 0; i < gas.length; i++) {
+
+            totalGas += gas[i];
+            totalCost += cost[i];
+
+            tank += gas[i] - cost[i];
+
+            // Cannot reach next station
+            if (tank < 0) {
+                start = i + 1;
+                tank = 0;
+            }
+        }
+
+        // Not enough gas overall
+        if (totalGas < totalCost) {
+            return -1;
+        }
+
+        return start;
+    }
+}
+
+Problem-54
+class Solution {
+    public List<Integer> spiralOrder(int[][] matrix) {
+
+        List<Integer> ans = new ArrayList<>();
+
+        int top = 0;
+        int bottom = matrix.length - 1;
+        int left = 0;
+        int right = matrix[0].length - 1;
+
+        while (top <= bottom && left <= right) {
+
+            // 1. Left → Right
+            for (int j = left; j <= right; j++) {
+                ans.add(matrix[top][j]);
+            }
+            top++;
+
+            // 2. Top → Bottom
+            for (int i = top; i <= bottom; i++) {
+                ans.add(matrix[i][right]);
+            }
+            right--;
+
+            // 3. Right → Left
+            if (top <= bottom) {
+                for (int j = right; j >= left; j--) {
+                    ans.add(matrix[bottom][j]);
+                }
+                bottom--;
+            }
+
+            // 4. Bottom → Top
+            if (left <= right) {
+                for (int i = bottom; i >= top; i--) {
+                    ans.add(matrix[i][left]);
+                }
+                left++;
+            }
+        }
+
+        return ans;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

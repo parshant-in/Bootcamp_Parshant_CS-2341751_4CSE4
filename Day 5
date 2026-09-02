@@ -1,0 +1,165 @@
+#Leet Code
+Problem-1768
+class Solution {
+    public String mergeAlternately(String word1, String word2) {
+
+        StringBuilder ans = new StringBuilder();
+
+        int i = 0;
+
+        while (i < word1.length() || i < word2.length()) {
+
+            if (i < word1.length()) {
+                ans.append(word1.charAt(i));
+            }
+
+            if (i < word2.length()) {
+                ans.append(word2.charAt(i));
+            }
+
+            i++;
+        }
+
+        return ans.toString();
+    }
+}
+
+Problem-1071
+class Solution {
+    public String gcdOfStrings(String str1, String str2) {
+
+        // Check whether they have the same repeating pattern
+        if (!(str1 + str2).equals(str2 + str1)) {
+            return "";
+        }
+
+        // Find GCD of their lengths
+        int gcdLength = gcd(str1.length(), str2.length());
+
+        return str1.substring(0, gcdLength);
+    }
+
+    public int gcd(int a, int b) {
+
+        while (b != 0) {
+            int rem = a % b;
+            a = b;
+            b = rem;
+        }
+
+        return a;
+    }
+}
+
+Problem-1431
+class Solution {
+    public List<Boolean> kidsWithCandies(int[] candies, int extraCandies) {
+
+        List<Boolean> result = new ArrayList<>();
+
+        // Find the maximum candies
+        int max = 0;
+
+        for (int candy : candies) {
+            if (candy > max) {
+                max = candy;
+            }
+        }
+
+        // Check each kid
+        for (int candy : candies) {
+            if (candy + extraCandies >= max) {
+                result.add(true);
+            } else {
+                result.add(false);
+            }
+        }
+
+        return result;
+    }
+}
+
+Problem-605
+class Solution {
+    public boolean canPlaceFlowers(int[] flowerbed, int n) {
+
+        if (n == 0) {
+            return true;
+        }
+
+        for (int i = 0; i < flowerbed.length; i++) {
+
+            if (flowerbed[i] == 0) {
+
+                boolean leftEmpty =
+                    (i == 0 || flowerbed[i - 1] == 0);
+
+                boolean rightEmpty =
+                    (i == flowerbed.length - 1 ||
+                     flowerbed[i + 1] == 0);
+
+                if (leftEmpty && rightEmpty) {
+
+                    flowerbed[i] = 1;
+                    n--;
+
+                    if (n == 0) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+}
+
+Problem-345
+class Solution {
+    public String reverseVowels(String s) {
+
+        char[] arr = s.toCharArray();
+
+        int left = 0;
+        int right = arr.length - 1;
+
+        while (left < right) {
+
+            // Find vowel from left
+            while (left < right && !isVowel(arr[left])) {
+                left++;
+            }
+
+            // Find vowel from right
+            while (left < right && !isVowel(arr[right])) {
+                right--;
+            }
+
+            // Swap vowels
+            char temp = arr[left];
+            arr[left] = arr[right];
+            arr[right] = temp;
+
+            left++;
+            right--;
+        }
+
+        return new String(arr);
+    }
+
+    public boolean isVowel(char c) {
+        return c == 'a' || c == 'e' || c == 'i' ||
+               c == 'o' || c == 'u' ||
+               c == 'A' || c == 'E' || c == 'I' ||
+               c == 'O' || c == 'U';
+    }
+}
+
+
+
+
+
+
+
+
+

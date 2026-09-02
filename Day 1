@@ -1,0 +1,143 @@
+#GFG
+Problem-While loop
+class Solution {
+    public static void utility(int x) {
+        while (x >= 0) {
+            System.out.print(x + " ");
+            x--;
+        }
+    }
+}
+
+
+
+# Leet Code
+Problem-8
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+void backtrack(char *s, char *current, int *used, int n, int pos) {
+    if (pos == n) {
+        current[pos] = '\0';
+        printf("%s\n", current);
+        return;
+    }
+
+    int usedChar[26] = {0};
+
+    for (int i = 0; i < n; i++) {
+        if (used[i])
+            continue;
+
+        int c = s[i] - 'A';
+
+        if (usedChar[c])
+            continue;
+
+        usedChar[c] = 1;
+        used[i] = 1;
+        current[pos] = s[i];
+
+        backtrack(s, current, used, n, pos + 1);
+
+        used[i] = 0;
+    }
+}
+
+int compare(const void *a, const void *b) {
+    return (*(char *)a - *(char *)b);
+}
+
+int main() {
+    char s[10];
+
+    scanf("%9s", s);
+
+    int n = strlen(s);
+
+    qsort(s, n, sizeof(char), compare);
+
+    char current[10];
+    int used[10] = {0};
+
+    backtrack(s, current, used, n, 0);
+
+    return 0;
+}
+
+Problem-165
+class Solution {
+    public int compareVersion(String version1, String version2) {
+
+        int i = 0;
+        int j = 0;
+
+        while (i < version1.length() || j < version2.length()) {
+
+            long num1 = 0;
+            long num2 = 0;
+
+            // Read revision from version1
+            while (i < version1.length() && version1.charAt(i) != '.') {
+                num1 = num1 * 10 + (version1.charAt(i) - '0');
+                i++;
+            }
+
+            // Read revision from version2
+            while (j < version2.length() && version2.charAt(j) != '.') {
+                num2 = num2 * 10 + (version2.charAt(j) - '0');
+                j++;
+            }
+
+            if (num1 < num2) {
+                return -1;
+            }
+
+            if (num1 > num2) {
+                return 1;
+            }
+
+            // Skip '.'
+            i++;
+            j++;
+        }
+
+        return 0;
+    }
+}
+
+Problem-12
+class Solution {
+    public String intToRoman(int num) {
+
+        int[] values = {
+            1000, 900, 500, 400,
+            100, 90, 50, 40,
+            10, 9, 5, 4, 1
+        };
+
+        String[] symbols = {
+            "M", "CM", "D", "CD",
+            "C", "XC", "L", "XL",
+            "X", "IX", "V", "IV", "I"
+        };
+
+        StringBuilder result = new StringBuilder();
+
+        for (int i = 0; i < values.length; i++) {
+
+            while (num >= values[i]) {
+                result.append(symbols[i]);
+                num -= values[i];
+            }
+        }
+
+        return result.toString();
+    }
+}
+
+
+
+

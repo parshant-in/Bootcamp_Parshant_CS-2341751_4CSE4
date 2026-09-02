@@ -1,0 +1,203 @@
+#Leet Code
+Problem-78
+class Solution {
+
+    public static void subsetfunc(int[] nums, int index, List<Integer> sublist, List<List<Integer>> ans) {
+
+        // adding sublist to the ans list 
+        ans.add(new ArrayList<>(sublist));    
+
+        // exploring the elements 
+        for(int i = index; i < nums.length; i++) {
+            sublist.add(nums[i]);
+
+        // move to the next index 
+        subsetfunc(nums, i + 1, sublist, ans);
+        
+        // backtracking
+        sublist.remove(sublist.size() - 1);  
+        }
+    }
+
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> ans = new ArrayList<>();
+        subsetfunc(nums, 0, new ArrayList<>(), ans);
+        return ans;
+    }
+}
+
+Problem-46
+class Solution {
+
+    public List<List<Integer>> permute(int[] nums) {
+
+        List<List<Integer>> ans = new ArrayList<>();
+        boolean[] visited = new boolean[nums.length];
+
+        backtrack(nums, visited, new ArrayList<>(), ans);
+
+        return ans;
+    }
+
+    private void backtrack(int[] nums,
+                           boolean[] visited,
+                           List<Integer> current,
+                           List<List<Integer>> ans) {
+
+        // Base Case
+        if (current.size() == nums.length) {
+            ans.add(new ArrayList<>(current));
+            return;
+        }
+
+        // Try every element
+        for (int i = 0; i < nums.length; i++) {
+
+            // Skip if already used
+            if (visited[i]) {
+                continue;
+            }
+
+            // Choose
+            visited[i] = true;
+            current.add(nums[i]);
+
+            // Explore
+            backtrack(nums, visited, current, ans);
+
+            // Backtrack
+            current.remove(current.size() - 1);
+            visited[i] = false;
+        }
+    }
+}
+
+Problem-22
+class Solution {
+
+    public List<String> generateParenthesis(int n) {
+
+        List<String> ans = new ArrayList<>();
+
+        backtrack(ans, "", 0, 0, n);
+
+        return ans;
+    }
+
+    private void backtrack(List<String> ans, String current,
+                           int open, int close, int n) {
+
+        // Base Case
+        if (current.length() == 2 * n) {
+            ans.add(current);
+            return;
+        }
+
+        // Add '('
+        if (open < n) {
+            backtrack(ans, current + "(", open + 1, close, n);
+        }
+
+        // Add ')'
+        if (close < open) {
+            backtrack(ans, current + ")", open, close + 1, n);
+        }
+    }
+}
+
+Problem-39
+
+class Solution {
+
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+
+        List<List<Integer>> ans = new ArrayList<>();
+
+        backtrack(candidates, target, 0, new ArrayList<>(), ans);
+
+        return ans;
+    }
+
+    private void backtrack(int[] candidates, int target, int index,
+                           List<Integer> current,
+                           List<List<Integer>> ans) {
+
+        // Base Case
+        if (target == 0) {
+            ans.add(new ArrayList<>(current));
+            return;
+        }
+
+        // If target becomes negative, stop exploring
+        if (target < 0) {
+            return;
+        }
+
+        // Try every candidate starting from index
+        for (int i = index; i < candidates.length; i++) {
+
+            // Choose
+            current.add(candidates[i]);
+
+            // Explore
+            // i is passed (not i+1) because we can reuse the same number
+            backtrack(candidates, target - candidates[i], i, current, ans);
+
+            // Backtrack
+            current.remove(current.size() - 1);
+        }
+    }
+}
+
+Problem-79
+class Solution {
+
+    public boolean exist(char[][] board, String word) {
+
+        int rows = board.length;
+        int cols = board[0].length;
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+
+                if (dfs(board, word, i, j, 0)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public boolean dfs(char[][] board, String word, int row, int col, int index) {
+
+        // Base Case: Entire word matched
+        if (index == word.length()) {
+            return true;
+        }
+
+        // Boundary and mismatch checks
+        if (row < 0 || row >= board.length ||
+            col < 0 || col >= board[0].length ||
+            board[row][col] != word.charAt(index)) {
+
+            return false;
+        }
+
+        // Mark current cell as visited
+        char temp = board[row][col];
+        board[row][col] = '#';
+
+        // Explore all four directions
+        boolean found =
+                dfs(board, word, row + 1, col, index + 1) ||
+                dfs(board, word, row - 1, col, index + 1) ||
+                dfs(board, word, row, col + 1, index + 1) ||
+                dfs(board, word, row, col - 1, index + 1);
+
+        // Backtrack
+        board[row][col] = temp;
+
+        return found;
+    }
+}

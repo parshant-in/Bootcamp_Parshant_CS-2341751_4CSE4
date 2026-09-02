@@ -1,0 +1,110 @@
+#Leet Code
+Problem-102
+class Solution {
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> ans = new ArrayList<>();
+        
+        if(root == null) return ans;
+        
+        Queue<TreeNode> q = new LinkedList<>();
+        q.add(root);
+        
+        while(!q.isEmpty()) {
+            
+            int len = q.size();
+            
+            List<Integer> sa = new ArrayList<>();
+            
+            for(int i = 0; i < len; i++) {
+                
+                TreeNode curr = q.remove();
+                
+                sa.add(curr.val);
+                
+                if(curr.left != null) {
+                    q.add(curr.left);
+                }
+                
+                if(curr.right != null) {
+                    q.add(curr.right);
+                }
+                
+                
+            }
+            
+            ans.add(sa);
+            
+        }
+        
+        return ans;
+        
+    }
+}
+
+Problem-199
+class Solution {
+    List<Integer> ans;
+    int globalLvl = 0;
+
+
+    public void rightView(TreeNode root, int currLvl,  List<Integer> ans) {
+
+        if(root == null) return ;
+
+        if(currLvl == globalLvl) {
+            ans.add(root.val);
+            globalLvl++;
+        }
+
+        rightView(root.right, currLvl + 1, ans);
+        rightView(root.left, currLvl + 1, ans);
+
+
+    }
+    public List<Integer> rightSideView(TreeNode root) {
+
+        ans = new ArrayList<Integer>();
+
+        rightView(root, 0, ans);
+
+        return ans;
+        
+    }
+}
+
+Problem-543
+class Solution {
+
+    public static int traversal(TreeNode root) {
+
+ if(root == null){
+            return 0;
+        }
+
+    int leftMax = traversal(root.left);
+    int rightMax = traversal(root.right);
+
+    int max = Math.max(leftMax, rightMax) + 1;
+    return max;
+    }
+
+    public int diameterOfBinaryTree(TreeNode root) {
+
+        if(root == null){
+            return 0;
+        }
+
+        int diam1 = diameterOfBinaryTree(root.left);
+        int diam2 = diameterOfBinaryTree(root.right);
+        int diam3 = traversal(root.left) + traversal(root.right);
+
+        return Math.max(diam3, Math.max(diam1, diam2));
+        
+    }
+}
+
+
+
+
+
+

@@ -1,0 +1,177 @@
+#Leet Code
+Problem-48
+class Solution {
+    public void rotate(int[][] matrix) {
+        
+        int brr[][] = new int[matrix.length][matrix.length];
+        int size = matrix.length;
+
+        for(int i=0; i < matrix.length; i++) {
+            for(int j = 0; j < matrix[0].length; j++) {
+                brr[j][size-i-1] = matrix[i][j];
+            }
+        }
+
+
+        for(int i = 0 ; i < size; i++) {
+            for(int j=0; j < size; j++) {
+                matrix[i][j] = brr[i][j];
+            }
+        }
+    }
+}
+
+Problem-73
+class Solution {
+    public void setZeroes(int[][] matrix) {
+
+        boolean row[] = new boolean[matrix.length];
+        boolean col[] = new boolean[matrix[0].length];
+
+        for(int i =0; i < matrix.length; i++) {
+            for(int j = 0; j < matrix[0].length; j++) {
+                if(matrix[i][j] == 0) {
+                    row[i] = true;
+                    col[j] = true;
+                }
+            }
+        }
+
+
+        for(int i = 0; i < row.length; i++) {
+            if(row[i] == true) {
+                for(int j = 0; j < matrix[0].length; j++) {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+
+        for(int j = 0; j < col.length; j++) {
+            if(col[j] == true) {
+                for(int i = 0; i < matrix.length; i++) {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+
+
+        
+    }
+}
+
+Problem-2022
+class Solution {
+    public int[][] construct2DArray(int[] original, int m, int n) {
+        
+        // If number of elements doesn't match m * n
+        if (original.length != m * n) {
+            return new int[0][0];
+        }
+
+        int[][] result = new int[m][n];
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                result[i][j] = original[i * n + j];
+            }
+        }
+
+        return result;
+    }
+}
+
+Problem-1260
+import java.util.*;
+
+class Solution {
+    public List<List<Integer>> shiftGrid(int[][] grid, int k) {
+
+        int m = grid.length;
+        int n = grid[0].length;
+        int total = m * n;
+
+        k = k % total;
+
+        List<List<Integer>> result = new ArrayList<>();
+
+        for (int i = 0; i < m; i++) {
+            List<Integer> row = new ArrayList<>();
+
+            for (int j = 0; j < n; j++) {
+
+                // Position of this cell in flattened array
+                int current = i * n + j;
+
+                // Find where its value came from
+                int previous = (current - k + total) % total;
+
+                int oldRow = previous / n;
+                int oldCol = previous % n;
+
+                row.add(grid[oldRow][oldCol]);
+            }
+
+            result.add(row);
+        }
+
+        return result;
+    }
+}
+
+Problem-289
+class Solution {
+    public void gameOfLife(int[][] board) {
+
+        int m = board.length;
+        int n = board[0].length;
+
+        // Copy of original board
+        int[][] copy = new int[m][n];
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                copy[i][j] = board[i][j];
+            }
+        }
+
+        // Directions for 8 neighbors
+        int[] dr = {-1, -1, -1, 0, 0, 1, 1, 1};
+        int[] dc = {-1, 0, 1, -1, 1, -1, 0, 1};
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+
+                int liveNeighbors = 0;
+
+                for (int k = 0; k < 8; k++) {
+
+                    int r = i + dr[k];
+                    int c = j + dc[k];
+
+                    if (r >= 0 && r < m &&
+                        c >= 0 && c < n &&
+                        copy[r][c] == 1) {
+
+                        liveNeighbors++;
+                    }
+                }
+
+                // Live cell
+                if (copy[i][j] == 1) {
+
+                    if (liveNeighbors < 2 || liveNeighbors > 3) {
+                        board[i][j] = 0;
+                    }
+
+                }
+                // Dead cell
+                else {
+
+                    if (liveNeighbors == 3) {
+                        board[i][j] = 1;
+                    }
+                }
+            }
+        }
+    }
+}

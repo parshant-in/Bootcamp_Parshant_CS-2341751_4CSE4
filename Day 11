@@ -1,0 +1,158 @@
+#Leet Code
+Problem-997
+class Solution {
+    public int findJudge(int n, int[][] trust) {
+
+        int[] inDegree = new int[n + 1];
+        int[] outDegree = new int[n + 1];
+
+        for (int[] t : trust) {
+            int a = t[0];
+            int b = t[1];
+
+            outDegree[a]++;
+            inDegree[b]++;
+        }
+
+        for (int i = 1; i <= n; i++) {
+
+            if (inDegree[i] == n - 1 && outDegree[i] == 0) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+}
+
+Problem-1071
+class Solution {
+    public String gcdOfStrings(String str1, String str2) {
+
+        // Check whether they have the same repeating pattern
+        if (!(str1 + str2).equals(str2 + str1)) {
+            return "";
+        }
+
+        // Find GCD of their lengths
+        int gcdLength = gcd(str1.length(), str2.length());
+
+        return str1.substring(0, gcdLength);
+    }
+
+    public int gcd(int a, int b) {
+
+        while (b != 0) {
+            int rem = a % b;
+            a = b;
+            b = rem;
+        }
+
+        return a;
+    }
+}
+
+Problem-207
+class Solution {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+
+        List<List<Integer>> graph = new ArrayList<>();
+
+        for (int i = 0; i < numCourses; i++) {
+            graph.add(new ArrayList<>());
+        }
+
+        int[] indegree = new int[numCourses];
+
+        // Build graph
+        for (int[] pair : prerequisites) {
+            int course = pair[0];
+            int prerequisite = pair[1];
+
+            graph.get(prerequisite).add(course);
+            indegree[course]++;
+        }
+
+        // Courses with no prerequisites
+        Queue<Integer> queue = new LinkedList<>();
+
+        for (int i = 0; i < numCourses; i++) {
+            if (indegree[i] == 0) {
+                queue.add(i);
+            }
+        }
+
+        int count = 0;
+
+        // Topological Sort
+        while (!queue.isEmpty()) {
+            int current = queue.poll();
+            count++;
+
+            for (int next : graph.get(current)) {
+                indegree[next]--;
+
+                if (indegree[next] == 0) {
+                    queue.add(next);
+                }
+            }
+        }
+
+        return count == numCourses;
+    }
+}
+
+Problem-200
+class Solution {
+
+    public int numIslands(char[][] grid) {
+
+        int count = 0;
+
+        for (int i = 0; i < grid.length; i++) {
+
+            for (int j = 0; j < grid[0].length; j++) {
+
+                if (grid[i][j] == '1') {
+
+                    count++;
+
+                    dfs(grid, i, j);
+                }
+            }
+        }
+
+        return count;
+    }
+
+    public void dfs(char[][] grid, int i, int j) {
+
+        // Out of bounds
+        if (i < 0 || i >= grid.length ||
+            j < 0 || j >= grid[0].length) {
+            return;
+        }
+
+        // Water or already visited
+        if (grid[i][j] == '0') {
+            return;
+        }
+
+        // Mark visited
+        grid[i][j] = '0';
+
+        // Up
+        dfs(grid, i - 1, j);
+
+        // Down
+        dfs(grid, i + 1, j);
+
+        // Left
+        dfs(grid, i, j - 1);
+
+        // Right
+        dfs(grid, i, j + 1);
+    }
+}
+
+
