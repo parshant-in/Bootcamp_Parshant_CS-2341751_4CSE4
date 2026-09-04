@@ -1,0 +1,180 @@
+#Leet code
+Problem:-695
+class Solution {
+    public int maxAreaOfIsland(int[][] grid) {
+        int maxArea = 0;
+
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j] == 1) {
+                    maxArea = Math.max(maxArea, dfs(grid, i, j));
+                }
+            }
+        }
+
+        return maxArea;
+    }
+
+    private int dfs(int[][] grid, int r, int c) {
+        if (r < 0 || r >= grid.length || c < 0 || c >= grid[0].length || grid[r][c] == 0) {
+            return 0;
+        }
+
+        grid[r][c] = 0;
+
+        return 1 + dfs(grid, r + 1, c)
+                 + dfs(grid, r - 1, c)
+                 + dfs(grid, r, c + 1)
+                 + dfs(grid, r, c - 1);
+    }
+}
+
+
+Problem:-733
+class Solution {
+    public int[][] floodFill(int[][] image, int sr, int sc, int color) {
+        int originalColor = image[sr][sc];
+
+        if (originalColor != color) {
+            dfs(image, sr, sc, originalColor, color);
+        }
+        
+        return image;
+    }
+
+    private void dfs(int[][] image, int r, int c, int originalColor, int newColor) {
+        if (r < 0 || r >= image.length || c < 0 || c >= image[0].length || image[r][c] != originalColor) {
+            return;
+        }
+
+        image[r][c] = newColor;
+
+        dfs(image, r + 1, c, originalColor, newColor);
+        dfs(image, r - 1, c, originalColor, newColor);
+        dfs(image, r, c + 1, originalColor, newColor);
+        dfs(image, r, c - 1, originalColor, newColor);
+    }
+}
+
+
+Problem:-802
+import java.util.ArrayList;
+import java.util.List;
+
+class Solution {
+    public List<Integer> eventualSafeNodes(int[][] graph) {
+        int n = graph.length;
+        int[] state = new int[n]; // 0, unvisited 1, visiting 2, safe
+        List<Integer> safeNodes = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+            if (isSafe(i, graph, state)) {
+                safeNodes.add(i);
+            }
+        }
+
+        return safeNodes;
+    }
+
+    private boolean isSafe(int node, int[][] graph, int[] state) {
+        if (state[node] != 0) {
+            return state[node] == 2;
+        }
+
+        state[node] = 1;
+
+        for (int neighbor : graph[node]) {
+            if (!isSafe(neighbor, graph, state)) {
+                return false;
+            }
+        }
+
+        state[node] = 2;
+        return true;
+    }
+}
+
+
+Problem:-841
+import java.util.ArrayDeque;
+import java.util.List;
+import java.util.Queue;
+
+class Solution {
+    public boolean canVisitAllRooms(List<List<Integer>> rooms) {
+        int n = rooms.size();
+        boolean[] visited = new boolean[n];
+        Queue<Integer> q = new ArrayDeque<>();
+
+        visited[0] = true;
+        q.offer(0);
+        int visitedCount = 1;
+
+        while (!q.isEmpty()) {
+            int currentRoom = q.poll();
+
+            for (int key : rooms.get(currentRoom)) {
+                if (!visited[key]) {
+                    visited[key] = true;
+                    visitedCount++;
+                    q.offer(key);
+                }
+            }
+        }
+
+        return visitedCount == n;
+    }
+}
+
+
+Problem:-994
+import java.util.ArrayDeque;
+import java.util.Queue;
+
+class Solution {
+    public int orangesRotting(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        Queue<int[]> queue = new ArrayDeque<>();
+        int freshCount = 0;
+
+        for (int r = 0; r < m; r++) {
+            for (int c = 0; c < n; c++) {
+                if (grid[r][c] == 2) {
+                    queue.offer(new int[]{r, c});
+                } else if (grid[r][c] == 1) {
+                    freshCount++;
+                }
+            }
+        }
+
+        if (freshCount == 0) return 0;
+
+        int minutes = 0;
+        int[][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+
+        while (!queue.isEmpty() && freshCount > 0) {
+            int size = queue.size();
+            minutes++;
+
+            for (int i = 0; i < size; i++) {
+                int[] curr = queue.poll();
+                int r = curr[0];
+                int c = curr[1];
+
+                for (int[] d : dirs) {
+                    int nr = r + d[0];
+                    int nc = c + d[1];
+
+                    if (nr >= 0 && nr < m && nc >= 0 && nc < n && grid[nr][nc] == 1) {
+                        grid[nr][nc] = 2;
+                        freshCount--;
+                        queue.offer(new int[]{nr, nc});
+                    }
+                }
+            }
+        }
+
+        return freshCount == 0 ? minutes : -1;
+    }
+}
