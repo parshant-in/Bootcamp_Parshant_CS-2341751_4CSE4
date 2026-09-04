@@ -1,0 +1,50 @@
+#Leetcode
+  Problem:-238
+class Solution:
+    def productExceptSelf(self, nums: List[int]) -> List[int]:
+        prefix = [1]
+        suffix = [1]
+        for num in nums:
+            prefix.append(prefix[-1]*num)
+        for num in nums[::-1]:
+            suffix.append(suffix[-1]*num)
+        answer = []
+        for i in range(len(nums)):
+            answer.append( prefix[i] * suffix[-i-2] )
+        return answer
+        
+    
+  Problem:-Palindrome
+public class palindrone {
+    public static void main(String[] args){
+        int num = 123454321;
+        int temp = num;
+        int rev = 0;
+        while (num>0) {
+            int rem = num%10;
+            rev = rev*10 + rem;
+            num = num/10;
+        }
+        if (temp == num) {
+            System.out.println("Equal!");
+        } else {
+            System.out.println("Not Equal!");
+        }
+    }
+}
+
+          
+  Problem:- reverse number
+    public class reverseNumber {
+    public static void main(String[] args) {
+        int num = 12345;
+        int rev = 0;
+        while (num>0){
+            int rem = num%10;
+            rev = rev*10 + rem;
+            num = num/10;
+        }
+        System.out.print("rev? "+ rev);
+    }
+}
+    
