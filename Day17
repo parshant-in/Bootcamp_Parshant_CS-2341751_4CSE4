@@ -1,0 +1,103 @@
+#Leetcode
+Problem:-1071
+class Solution {
+    public String gcdOfStrings(String str1, String str2) {
+
+        // Check whether they have the same repeating pattern
+        if (!(str1 + str2).equals(str2 + str1)) {
+            return "";
+        }
+
+        // Find GCD of their lengths
+        int gcdLength = gcd(str1.length(), str2.length());
+
+        return str1.substring(0, gcdLength);
+    }
+
+    public int gcd(int a, int b) {
+
+        while (b != 0) {
+            int rem = a % b;
+            a = b;
+            b = rem;
+        }
+
+        return a;
+    }
+}
+
+
+Problem:-1431
+class Solution {
+    public List<Boolean> kidsWithCandies(int[] candies, int extraCandies) {
+
+        List<Boolean> result = new ArrayList<>();
+
+        // Find the maximum candies
+        int max = 0;
+
+        for (int candy : candies) {
+            if (candy > max) {
+                max = candy;
+            }
+        }
+
+        // Check each kid
+        for (int candy : candies) {
+            if (candy + extraCandies >= max) {
+                result.add(true);
+            } else {
+                result.add(false);
+            }
+        }
+
+        return result;
+    }
+}
+
+
+Problem:-151
+class Solution {
+    public String reverseWords(String s) {
+
+        String[] words = s.trim().split("\\s+");
+
+        StringBuilder ans = new StringBuilder();
+
+        for (int i = words.length - 1; i >= 0; i--) {
+            ans.append(words[i]);
+
+            if (i != 0) {
+                ans.append(" ");
+            }
+        }
+
+        return ans.toString();
+    }
+}
+
+
+Problem:-1768
+class Solution {
+    public String mergeAlternately(String word1, String word2) {
+
+        StringBuilder ans = new StringBuilder();
+
+        int i = 0;
+
+        while (i < word1.length() || i < word2.length()) {
+
+            if (i < word1.length()) {
+                ans.append(word1.charAt(i));
+            }
+
+            if (i < word2.length()) {
+                ans.append(word2.charAt(i));
+            }
+
+            i++;
+        }
+
+        return ans.toString();
+    }
+}
