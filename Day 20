@@ -1,0 +1,262 @@
+#leetcde
+Problem:-1116
+class ZeroEvenOdd {
+    private int n;
+
+    private Semaphore zeroSemaphore = new Semaphore(1);
+    private Semaphore evenSemaphore = new Semaphore(0);
+    private Semaphore oddSemaphore = new Semaphore(0);
+
+    public ZeroEvenOdd(int n) {
+        this.n = n;
+    }
+
+    // Thread A
+    public void zero(IntConsumer printNumber) throws InterruptedException {
+        for (int i = 1; i <= n; i++) {
+
+            zeroSemaphore.acquire();
+
+            printNumber.accept(0);
+
+            if (i % 2 == 1) {
+                oddSemaphore.release();
+            } else {
+                evenSemaphore.release();
+            }
+        }
+    }
+
+    // Thread B
+    public void even(IntConsumer printNumber) throws InterruptedException {
+        for (int i = 2; i <= n; i += 2) {
+
+            evenSemaphore.acquire();
+
+            printNumber.accept(i);
+
+            zeroSemaphore.release();
+        }
+    }
+
+    // Thread C
+    public void odd(IntConsumer printNumber) throws InterruptedException {
+        for (int i = 1; i <= n; i += 2) {
+
+            oddSemaphore.acquire();
+
+            printNumber.accept(i);
+
+            zeroSemaphore.release();
+        }
+    }
+}
+
+
+Problem:-1359
+class Solution {
+
+    public int countOrders(int n) {
+
+        long MOD = 1000000007;
+        long ans = 1;
+
+        for (int i = 1; i <= n; i++) {
+
+            ans = ans * i % MOD;
+            ans = ans * (2L * i - 1) % MOD;
+        }
+
+        return (int) ans;
+    }
+}
+
+
+Problem:-136
+class Solution {
+    public int singleNumber(int[] nums) {
+
+        int ans = 0;
+
+        for (int num : nums) {
+            ans = ans ^ num;
+        }
+
+        return ans;
+    }
+}
+
+
+Problem:-1899
+class Solution {
+    public boolean mergeTriplets(int[][] triplets, int[] target) {
+
+        boolean x = false;
+        boolean y = false;
+        boolean z = false;
+
+        for (int[] t : triplets) {
+
+            // This triplet can never be used
+            if (t[0] > target[0] ||
+                t[1] > target[1] ||
+                t[2] > target[2]) {
+                continue;
+            }
+
+            // Check which target values this triplet can provide
+            if (t[0] == target[0]) {
+                x = true;
+            }
+
+            if (t[1] == target[1]) {
+                y = true;
+            }
+
+            if (t[2] == target[2]) {
+                z = true;
+            }
+        }
+
+        return x && y && z;
+    }
+}
+
+
+Problem:-191
+class Solution {
+    public int hammingWeight(int n) {
+
+        int count = 0;
+
+        while (n != 0) {
+
+            if ((n & 1) == 1) {
+                count++;
+            }
+
+            n = n >> 1;
+        }
+
+        return count;
+    }
+}
+
+
+Problem:-301
+class Solution {
+
+    Set<String> result = new HashSet<>();
+
+    public List<String> removeInvalidParentheses(String s) {
+
+        int left = 0;
+        int right = 0;
+
+        // Find number of invalid '(' and ')'
+        for (char ch : s.toCharArray()) {
+
+            if (ch == '(') {
+                left++;
+            } 
+            else if (ch == ')') {
+
+                if (left > 0) {
+                    left--;
+                } else {
+                    right++;
+                }
+            }
+        }
+
+        dfs(s, 0, left, right, 0, new StringBuilder());
+
+        return new ArrayList<>(result);
+    }
+
+    private void dfs(String s, int index,
+                     int leftRemove, int rightRemove,
+                     int balance, StringBuilder current) {
+
+        // Invalid balance
+        if (balance < 0) {
+            return;
+        }
+
+        // End of string
+        if (index == s.length()) {
+
+            if (leftRemove == 0 &&
+                rightRemove == 0 &&
+                balance == 0) {
+
+                result.add(current.toString());
+            }
+
+            return;
+        }
+
+        char ch = s.charAt(index);
+
+        // Option 1: Remove current character
+        if (ch == '(' && leftRemove > 0) {
+            dfs(s, index + 1,
+                leftRemove - 1,
+                rightRemove,
+                balance,
+                current);
+        }
+
+        if (ch == ')' && rightRemove > 0) {
+            dfs(s, index + 1,
+                leftRemove,
+                rightRemove - 1,
+                balance,
+                current);
+        }
+
+        // Option 2: Keep current character
+        current.append(ch);
+
+        if (ch == '(') {
+
+            dfs(s, index + 1,
+                leftRemove,
+                rightRemove,
+                balance + 1,
+                current);
+
+        } else if (ch == ')') {
+
+            dfs(s, index + 1,
+                leftRemove,
+                rightRemove,
+                balance - 1,
+                current);
+
+        } else {
+
+            // Letter
+            dfs(s, index + 1,
+                leftRemove,
+                rightRemove,
+                balance,
+                current);
+        }
+
+        // Backtrack
+        current.deleteCharAt(current.length() - 1);
+    }
+}
+
+
+Problem:-338
+class Solution {
+    public int[] countBits(int n) {
+        int[] res = new int[n+1];
+        for (int i = 0; i<=n; i++){
+            res[i] = Integer.bitCount(i);
+        }
+        return res;
+    }
+}
